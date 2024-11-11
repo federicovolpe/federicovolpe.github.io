@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>iPortfolio Bootstrap Template - Index</title>
+  <meta content name="description">
+  <meta content name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/Logo.png" rel="icon">
+  <link href="assets/img/Logo.png" rel="apple-touch-icon">
+
+  <!-- Fonts Di Google -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <section id="portfolio" class="portfolio section-bg">
+    <div class="container">
+
+      <div class="section-title">
+        <h2>Portfolio</h2>
+        <p>i progetti eseguiti sono di diversa natura e si possono trovare
+          nella loro interezza sul sito github</p>
+      </div>
+
+      <div class="row" data-aos="fade-up">
+        <div class="col-lg-12 d-flex justify-content-center">
+          <ul id="portfolio-flters">
+            <li data-filter="*" class="filter-active">All</li>
+            <li data-filter=".filter-app">App</li>
+            <li data-filter=".filter-database">Database</li>
+            <li data-filter=".filter-web">Web</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
+
+
+        <div id="repo-count"></div>
+        <div id="repo-container"></div>
+
+
+        <script>
+          const username = 'federicovolpe'; // Replace with your actual GitHub username
+
+          fetch(`https://api.github.com/users/${username}/repos`)
+            .then(response => response.json())
+            .then(data => {
+              const container = document.getElementById('repo-container');
+
+              const repoCount = document.getElementById('repo-count');
+
+              // Mostra il numero di repository fetchate
+              repoCount.textContent = `Number of repositories fetched: ${data.length}`;
+
+
+              data.forEach(repo => {
+                const repoElement = document.createElement('div');
+                repoElement.classList.add('col-lg-4', 'col-md-6', 'portfolio-item', 'filter-database', 'filter-web');
+                repoElement.setAttribute('name', repo.name);
+
+                const portfolioWrap = document.createElement('div');
+                portfolioWrap.classList.add('portfolio-wrap');
+
+                const demoGifElement = document.createElement('img');
+                demoGifElement.src = `https://raw.githubusercontent.com/${username}/${repo.name}/master/demo.gif`;
+                demoGifElement.classList.add('img-fluid');
+                demoGifElement.alt = `Demo GIF for ${repo.name}`;
+                portfolioWrap.appendChild(demoGifElement);
+
+                const portfolioLinks = document.createElement('div');
+                portfolioLinks.classList.add('portfolio-links');
+
+                const lightboxLink = document.createElement('a');
+                lightboxLink.href = `https://raw.githubusercontent.com/${username}/${repo.name}/master/demo.gif`;
+                lightboxLink.setAttribute('data-gallery', 'portfolioGallery');
+                lightboxLink.classList.add('portfolio-lightbox');
+                lightboxLink.title = repo.name;
+                lightboxLink.innerHTML = '<i class="bx bx-plus"></i>';
+                portfolioLinks.appendChild(lightboxLink);
+
+                const detailsLink = document.createElement('a');
+                detailsLink.href = `https://github.com/${username}/${repo.name}`;
+                detailsLink.title = 'More Details';
+                detailsLink.innerHTML = '<i class="bx bx-link"></i>';
+                portfolioLinks.appendChild(detailsLink);
+
+                portfolioWrap.appendChild(portfolioLinks);
+                repoElement.appendChild(portfolioWrap);
+                container.appendChild(repoElement);
+              });
+            })
+            .catch(error => console.error('Errore nel fetch:', error));
+        </script>
+
+
+
+
+
+      </div>
+    </div>
+  </section>
+
+
+</body>
+
+</html>

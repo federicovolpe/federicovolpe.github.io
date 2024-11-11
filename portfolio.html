@@ -1,0 +1,117 @@
+<div class="container">
+
+  <div class="section-title">
+    <h2>Portfolio</h2>
+    <p>i progetti eseguiti sono di diversa natura e si possono trovare
+      nella loro interezza sul sito github</p>
+  </div>
+
+  <div class="row" data-aos="fade-up">
+    <div class="col-lg-12 d-flex justify-content-center">
+      <ul id="portfolio-flters">
+        <li data-filter="*" class="filter-active">All</li>
+        <li data-filter=".filter-app">App</li>
+        <li data-filter=".filter-database">Database</li>
+        <li data-filter=".filter-web">Web</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
+
+    <div id="repo-count"></div>
+    <div id="repo-container"></div>
+
+
+    <script>
+      const username = 'federicovolpe'; // Replace with your actual GitHub username
+
+      fetch(`https://api.github.com/users/${username}/repos`)
+        .then(response => response.json())
+        .then(data => {
+          const container = document.getElementById('repo-container');
+
+          const repoCount = document.getElementById('repo-count');
+          console.log("number of repositories fetched:", data.length);
+
+          // Mostra il numero di repository fetchate
+          repoCount.textContent = `Number of repositories fetched: ${data.length}`;
+
+
+          data.forEach(repo => {
+            const repoElement = document.createElement('div');
+            repoElement.classList.add('col-lg-4', 'col-md-6', 'portfolio-item', 'filter-web');
+            repoElement.setAttribute('name', repo.name);
+
+            const portfolioWrap = document.createElement('div');
+            portfolioWrap.classList.add('portfolio-wrap');
+
+            const demoGifElement = document.createElement('img');
+
+            const tryImages = [
+              `https://raw.githubusercontent.com/${username}/${repo.name}/master/demo.gif`,
+              `https://raw.githubusercontent.com/${username}/${repo.name}/main/demo.gif`,
+              `https://raw.githubusercontent.com/${username}/${repo.name}/master/demo.jpg`,
+              `https://raw.githubusercontent.com/${username}/${repo.name}/main/demo.jpg`,
+              'demo_not_found.jpg'
+            ];
+
+            function loadImage(srcIndex) {
+              demoGifElement.src = tryImages[srcIndex];
+
+              demoGifElement.onerror = () => {
+                // print the failed image path
+                console.log(`Failed to load image: ${tryImages[srcIndex]}`);
+
+                if (srcIndex < tryImages.length - 1) {
+                  // Try the next file in the list
+                  loadImage(srcIndex + 1);
+                }
+              };
+            }
+
+            // Start by trying the first image
+            loadImage(0);
+            demoGifElement.classList.add('img-fluid');
+            demoGifElement.alt = `Demo GIF for ${repo.name}`;
+
+
+            demoGifElement.onerror = () => {
+              demoGifElement.src = 'demo_not_found.jpg'; // Percorso dell'immagine di fallback
+            };
+
+            portfolioWrap.appendChild(demoGifElement);
+
+            const portfolioLinks = document.createElement('div');
+            portfolioLinks.classList.add('portfolio-links');
+
+            const lightboxLink = document.createElement('a');
+
+            lightboxLink.href = `https://raw.githubusercontent.com/${username}/${repo.name}/master/demo.gif`;
+            lightboxLink.setAttribute('data-gallery', 'portfolioGallery');
+            lightboxLink.classList.add('portfolio-lightbox');
+            lightboxLink.title = repo.name;
+            lightboxLink.innerHTML = '<i class="bx bx-plus"></i>';
+            portfolioLinks.appendChild(lightboxLink);
+
+            const detailsLink = document.createElement('a');
+            detailsLink.href = `https://github.com/${username}/${repo.name}`;
+            detailsLink.title = 'More Details';
+            detailsLink.innerHTML = '<i class="bx bx-link"></i>';
+            portfolioLinks.appendChild(detailsLink);
+
+            portfolioWrap.appendChild(portfolioLinks);
+            repoElement.appendChild(portfolioWrap);
+            container.appendChild(repoElement);
+          });
+        })
+        .catch(error => console.error('Errore nel fetch:', error));
+    </script>
+
+
+
+
+
+
+  </div>
+</div>
